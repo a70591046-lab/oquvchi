@@ -73,7 +73,22 @@ app.post('/api/update-password', (req, res) => {
     });
 });
 
-const PORT = 3000;
+app.get('/api/users', (req, res) => {
+    db.all('SELECT id, firstName, lastName, email, password FROM users', [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows);
+    });
+});
+
+app.post('/api/delete-user', (req, res) => {
+    const { id } = req.body;
+    db.run('DELETE FROM users WHERE id = ?', [id], (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true });
+    });
+});
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
