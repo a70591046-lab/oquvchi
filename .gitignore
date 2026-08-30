@@ -1,0 +1,7 @@
+node_modules/
+.env
+lms.db
+tunnel.log
+pinggy.log
+lhr.log
+cloudflared.exe
