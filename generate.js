@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+const fs = require('fs');
+
+const html = `<!DOCTYPE html>
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
@@ -336,7 +338,7 @@
             toast.className = 'transform translate-y-10 opacity-0 transition-all duration-300 ease-out bg-white border border-slate-200 shadow-lg rounded-xl p-4 flex items-center gap-3 w-72 md:w-auto';
             const iconColor = type === 'success' ? 'text-emerald-500' : 'text-amber-500';
             const iconName = type === 'success' ? 'check-circle-2' : 'alert-circle';
-            toast.innerHTML = `<div class="shrink-0 mt-0.5"><i data-lucide="${iconName}" class="w-5 h-5 ${iconColor}"></i></div><div><h4 class="text-sm font-medium text-slate-900">${message}</h4></div>`;
+            toast.innerHTML = \`<div class="shrink-0 mt-0.5"><i data-lucide="\${iconName}" class="w-5 h-5 \${iconColor}"></i></div><div><h4 class="text-sm font-medium text-slate-900">\${message}</h4></div>\`;
             toastContainer.appendChild(toast);
             lucide.createIcons({ root: toast }); 
             requestAnimationFrame(() => {
@@ -384,12 +386,12 @@
             dash.classList.remove('hidden');
             setTimeout(() => dash.classList.add('opacity-100'), 50);
 
-            document.getElementById('header-user-name').textContent = `Xush kelibsiz, ${user.firstName}`;
+            document.getElementById('header-user-name').textContent = \`Xush kelibsiz, \${user.firstName}\`;
             document.getElementById('input-firstname').value = user.firstName;
             document.getElementById('input-lastname').value = user.lastName;
             document.getElementById('input-email').value = user.email;
             
-            const defaultAvatar = `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=f1f5f9&color=0f172a&font-size=0.35`;
+            const defaultAvatar = \`https://ui-avatars.com/api/?name=\${user.firstName}+\${user.lastName}&background=f1f5f9&color=0f172a&font-size=0.35\`;
             const avatarSrc = user.avatar || defaultAvatar;
             document.getElementById('header-avatar').src = avatarSrc;
             document.getElementById('profile-avatar-preview').src = avatarSrc;
@@ -423,10 +425,10 @@
                 }
                 data.password = pass; 
                 localStorage.setItem('lms_current_user', JSON.stringify(data));
-                showToast('Muvaffaqiyatli ro\'yxatdan o\'tdingiz!');
+                showToast('Muvaffaqiyatli ro\\'yxatdan o\\'tdingiz!');
                 loadDashboard(data);
             } catch (err) {
-                showToast('Server bilan bog\'lanishda xato', 'error');
+                showToast('Server bilan bog\\'lanishda xato', 'error');
             }
         }
 
@@ -442,14 +444,14 @@
                 });
                 const data = await res.json();
                 if(!res.ok) {
-                    showToast(data.error || 'Email yoki parol noto\'g\'ri', 'error');
+                    showToast(data.error || 'Email yoki parol noto\\'g\\'ri', 'error');
                     return;
                 }
                 localStorage.setItem('lms_current_user', JSON.stringify(data));
                 loadDashboard(data);
                 showToast('Tizimga muvaffaqiyatli kirdingiz!');
             } catch (err) {
-                showToast('Server bilan bog\'lanishda xato', 'error');
+                showToast('Server bilan bog\\'lanishda xato', 'error');
             }
         }
 
@@ -488,7 +490,7 @@
                 const file = e.target.files[0];
                 if(file) {
                     if(file.size > 2 * 1024 * 1024) {
-                        showToast('Rasm hajmi 2MB dan katta bo\'lmasligi kerak', 'error');
+                        showToast('Rasm hajmi 2MB dan katta bo\\'lmasligi kerak', 'error');
                         return;
                     }
                     const reader = new FileReader();
@@ -511,7 +513,7 @@
             const firstName = document.getElementById('input-firstname').value.trim();
             const lastName = document.getElementById('input-lastname').value.trim();
             if(!firstName || !lastName) {
-                showToast('Ism va familiya bo\'sh bo\'lishi mumkin emas', 'error');
+                showToast('Ism va familiya bo\\'sh bo\\'lishi mumkin emas', 'error');
                 return;
             }
             let user = JSON.parse(localStorage.getItem('lms_current_user'));
@@ -519,9 +521,9 @@
             user.lastName = lastName;
             localStorage.setItem('lms_current_user', JSON.stringify(user));
             updateUserInDB(user);
-            document.getElementById('header-user-name').textContent = `Xush kelibsiz, ${firstName}`;
+            document.getElementById('header-user-name').textContent = \`Xush kelibsiz, \${firstName}\`;
             if(!user.avatar) {
-                const defaultAvatar = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=f1f5f9&color=0f172a&font-size=0.35`;
+                const defaultAvatar = \`https://ui-avatars.com/api/?name=\${firstName}+\${lastName}&background=f1f5f9&color=0f172a&font-size=0.35\`;
                 document.getElementById('header-avatar').src = defaultAvatar;
                 document.getElementById('profile-avatar-preview').src = defaultAvatar;
             }
@@ -532,7 +534,7 @@
             const curr = document.getElementById('input-curr-pass').value;
             const newP = document.getElementById('input-new-pass').value;
             const conf = document.getElementById('input-conf-pass').value;
-            if(!curr || !newP || !conf) { showToast('Iltimos, barcha maydonlarni to\'ldiring', 'error'); return; }
+            if(!curr || !newP || !conf) { showToast('Iltimos, barcha maydonlarni to\\'ldiring', 'error'); return; }
             if(newP !== conf) { showToast('Yangi parollar mos kelmadi', 'error'); return; }
             if(newP.length < 8) { showToast('Kamida 8 ta belgi kiriting', 'error'); return; }
             let user = JSON.parse(localStorage.getItem('lms_current_user'));
@@ -543,7 +545,7 @@
                     body: JSON.stringify({ email: user.email, currentPassword: curr, newPassword: newP })
                 });
                 const data = await res.json();
-                if(!res.ok) { showToast(data.error || 'Joriy parol noto\'g\'ri!', 'error'); return; }
+                if(!res.ok) { showToast(data.error || 'Joriy parol noto\\'g\\'ri!', 'error'); return; }
                 user.password = newP;
                 localStorage.setItem('lms_current_user', JSON.stringify(user));
                 showToast('Parol muvaffaqiyatli yangilandi!');
@@ -620,33 +622,33 @@
                 const users = await res.json();
                 
                 if(users.length === 0) {
-                    table.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">Hozircha o\'quvchilar yo\'q</td></tr>';
+                    table.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">Hozircha o\\'quvchilar yo\\'q</td></tr>';
                     return;
                 }
                 
                 table.innerHTML = '';
                 users.forEach(u => {
-                    const defaultAvatar = `https://ui-avatars.com/api/?name=${u.firstName}+${u.lastName}&background=f1f5f9&color=0f172a&font-size=0.35`;
+                    const defaultAvatar = \`https://ui-avatars.com/api/?name=\${u.firstName}+\${u.lastName}&background=f1f5f9&color=0f172a&font-size=0.35\`;
                     const tr = document.createElement('tr');
                     tr.className = 'hover:bg-slate-50/50 transition-colors group';
-                    tr.innerHTML = `
-                        <td class="px-4 py-3 text-slate-500">#${u.id}</td>
+                    tr.innerHTML = \`
+                        <td class="px-4 py-3 text-slate-500">#\${u.id}</td>
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
-                                    <img src="${defaultAvatar}" alt="Avatar" class="w-full h-full object-cover">
+                                    <img src="\${defaultAvatar}" alt="Avatar" class="w-full h-full object-cover">
                                 </div>
-                                <span class="font-medium text-slate-900">${u.firstName} ${u.lastName}</span>
+                                <span class="font-medium text-slate-900">\${u.firstName} \${u.lastName}</span>
                             </div>
                         </td>
-                        <td class="px-4 py-3 text-slate-600">${u.email}</td>
-                        <td class="px-4 py-3 text-slate-500 font-mono text-xs">${u.password}</td>
+                        <td class="px-4 py-3 text-slate-600">\${u.email}</td>
+                        <td class="px-4 py-3 text-slate-500 font-mono text-xs">\${u.password}</td>
                         <td class="px-4 py-3 text-right">
-                            <button onclick="deleteUser(${u.id})" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="O'chirish">
+                            <button onclick="deleteUser(\${u.id})" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="O'chirish">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </td>
-                    `;
+                    \`;
                     table.appendChild(tr);
                 });
                 lucide.createIcons({ root: table });
@@ -655,32 +657,8 @@
             }
         }
 
-                async function changeUserPassword(id) {
-            const newPassword = prompt('Yangi parolni kiriting (kamida 8 ta belgi):');
-            if(!newPassword) return;
-            if(newPassword.length < 8) {
-                showToast('Parol juda qisqa', 'error');
-                return;
-            }
-            try {
-                const res = await fetch('/api/admin/update-password', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id, newPassword })
-                });
-                if(res.ok) {
-                    showToast('Parol o\zgartirildi');
-                    loadAdminUsers();
-                } else {
-                    showToast('Xatolik yuz berdi', 'error');
-                }
-            } catch(e) {
-                showToast('Server xatosi', 'error');
-            }
-        }
-
         async function deleteUser(id) {
-            if(!confirm('Bu o\'quvchini o\'chirmoqchimisiz?')) return;
+            if(!confirm('Bu o\\'quvchini o\\'chirmoqchimisiz?')) return;
             try {
                 const res = await fetch('/api/delete-user', {
                     method: 'POST',
@@ -688,7 +666,7 @@
                     body: JSON.stringify({ id })
                 });
                 if(res.ok) {
-                    showToast('O\'quvchi o\'chirildi');
+                    showToast('O\\'quvchi o\\'chirildi');
                     loadAdminUsers();
                 } else {
                     showToast('Xatolik yuz berdi', 'error');
@@ -701,4 +679,7 @@
         initApp();
     </script>
 </body>
-</html>
+</html>`;
+
+fs.writeFileSync('public/index.html', html);
+console.log('index.html muvaffaqiyatli yangilandi');

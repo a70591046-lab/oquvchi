@@ -88,6 +88,14 @@ app.post('/api/delete-user', (req, res) => {
     });
 });
 
+app.post('/api/admin/update-password', (req, res) => {
+    const { id, newPassword } = req.body;
+    db.run('UPDATE users SET password = ? WHERE id = ?', [newPassword, id], (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true });
+    });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
